@@ -7,14 +7,14 @@ lazy val commonSettings = Seq(
   organizationName := "Haifeng Li",
   organizationHomepage := Some(url("http://haifengl.github.io/")),
   version := "1.2.0",
-  javacOptions in (Compile, compile) ++= Seq("-source", "1.8", "-target", "1.8", "-g:lines,vars,source"),
+  javacOptions in (Compile, compile) ++= Seq("-source", "1.7", "-target", "1.7", "-g:lines,vars,source"),
   javacOptions in (Compile, doc) ++= Seq("-Xdoclint:none"),
   libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test",
   scalaVersion := "2.11.7",
   scalacOptions := Seq("-unchecked", "-deprecation", "-feature", "-encoding", "utf8"),
   parallelExecution in Test := false,
   crossPaths := false,
-  autoScalaLibrary := false,
+  autoScalaLibrary := true,
   publishTo := {
     val nexus = "https://oss.sonatype.org/"
     if (isSnapshot.value)
@@ -58,7 +58,7 @@ lazy val nonPubishSettings = commonSettings ++ Seq(
 )
 
 lazy val root = project.in(file(".")).settings(nonPubishSettings: _*)
-  .aggregate(core, data, math, graph, plot, interpolation, nlp, demo, benchmark, scala, shell)
+  .aggregate(core, data, math, graph, interpolation, nlp)
 
 lazy val math = project.in(file("math")).settings(commonSettings: _*)
 
@@ -74,10 +74,17 @@ lazy val nlp = project.in(file("nlp")).settings(commonSettings: _*).dependsOn(co
 
 lazy val plot = project.in(file("plot")).settings(commonSettings: _*).dependsOn(core)
 
-lazy val demo = project.in(file("demo")).settings(nonPubishSettings: _*).dependsOn(core, interpolation, plot)
+//lazy val demo = project.in(file("demo")).settings(nonPubishSettings: _*).dependsOn(core, interpolation, plot)
 
-lazy val benchmark = project.in(file("benchmark")).settings(nonPubishSettings: _*).dependsOn(core, scala)
+//lazy val benchmark = project.in(file("benchmark")).settings(nonPubishSettings: _*).dependsOn(core, scala)
 
-lazy val scala = project.in(file("scala")).settings(commonSettings: _*).dependsOn(interpolation, nlp, plot)
+//lazy val scala = project.in(file("scala")).settings(commonSettings: _*).dependsOn(interpolation, nlp, plot)
 
-lazy val shell = project.in(file("shell")).settings(nonPubishSettings: _*).dependsOn(benchmark, demo, scala)
+//lazy val shell = project.in(file("shell")).settings(nonPubishSettings: _*).dependsOn(benchmark, demo, scala)
+
+assemblyMergeStrategy in assembly := {
+  case x =>
+    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    if (oldStrategy(x) == MergeStrategy.deduplicate) MergeStrategy.discard
+    else MergeStrategy.discard
+}
