@@ -81,10 +81,3 @@ lazy val plot = project.in(file("plot")).settings(commonSettings: _*).dependsOn(
 //lazy val scala = project.in(file("scala")).settings(commonSettings: _*).dependsOn(interpolation, nlp, plot)
 
 //lazy val shell = project.in(file("shell")).settings(nonPubishSettings: _*).dependsOn(benchmark, demo, scala)
-
-assemblyMergeStrategy in assembly := {
-  case x =>
-    val oldStrategy = (assemblyMergeStrategy in assembly).value
-    if (oldStrategy(x) == MergeStrategy.deduplicate) MergeStrategy.discard
-    else MergeStrategy.discard
-}

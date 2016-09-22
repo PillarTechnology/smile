@@ -5,7 +5,7 @@ if [[ "$1" == "" ]]; then
     exit 1
 fi
 
-sbt assembly
+sbt package
 
 if [ "$?" -gt 0 ]; then
     echo FAILED.
@@ -14,4 +14,3 @@ fi
 
 find . -iname 'smile-core*.jar' | xargs -I{} cp {} $1/smile-core.jar
 find . -iname 'smile-math*.jar' | xargs -I{} cp {} $1/smile-math.jar
-
